@@ -55,9 +55,9 @@ Open a terminal (or Git Bash on Windows) in the project folder and run:
 git init
 git add .
 git commit -m "Initial commit — Mandondo Consulting website"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/mandondo-consulting.git
-git push -u origin main
+git branch -M master
+git remote add origin https://github.com/ZolileN/mandondo-consulting
+git push -u origin master
 ```
 
 Replace `YOUR_USERNAME` with your actual GitHub username.
@@ -66,11 +66,11 @@ Replace `YOUR_USERNAME` with your actual GitHub username.
 1. Go to your repository on GitHub
 2. Click **Settings** → scroll to **Pages**
 3. Under **Source**, select **Deploy from a branch**
-4. Choose branch: `main`, folder: `/ (root)`
+4. Choose branch: `master`, folder: `/ (root)`
 5. Click **Save**
 
 Your site will be live at:
-`https://YOUR_USERNAME.github.io/mandondo-consulting`
+`https://ZolileN.github.io/mandondo-consulting`
 
 (Takes about 1–2 minutes to appear.)
 

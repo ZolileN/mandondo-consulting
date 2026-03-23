@@ -13,30 +13,54 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 /* ---- WHATSAPP BUTTON ---- */
 function openWhatsApp() {
-  const PHONE = '27000000000'; // TODO: Replace with real number (no + or spaces)
+  const PHONE = '27711193178'; // Real WhatsApp number
   const MSG = encodeURIComponent("Hi Mandondo Consulting, I'd like to enquire about your services.");
   window.open(`https://wa.me/${PHONE}?text=${MSG}`, '_blank');
 }
 
-/* ---- ENQUIRY FORM (basic validation & submission placeholder) ---- */
-const sendBtn = document.querySelector('.btn-send');
-if (sendBtn) {
-  sendBtn.addEventListener('click', () => {
-    const name    = document.querySelector('input[data-field="name"]')?.value.trim();
-    const phone   = document.querySelector('input[data-field="phone"]')?.value.trim();
-    const service = document.querySelector('select[data-field="service"]')?.value;
-    const message = document.querySelector('textarea[data-field="message"]')?.value.trim();
+/* ---- ENQUIRY FORM (Web3Form submission) ---- */
+const contactForm = document.getElementById('contactForm');
+const formMessage = document.getElementById('formMessage');
 
-    if (!name || !phone) {
-      alert('Please fill in your name and phone number.');
-      return;
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    // Show loading state
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+    formMessage.style.display = 'none';
+    
+    try {
+      const formData = new FormData(contactForm);
+      
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        formMessage.textContent = 'Thank you! Your enquiry has been sent successfully. We\'ll contact you soon.';
+        formMessage.style.color = '#28a745';
+        formMessage.style.display = 'block';
+        contactForm.reset();
+      } else {
+        throw new Error(result.message || 'Form submission failed');
+      }
+    } catch (error) {
+      formMessage.textContent = 'Sorry, there was an error sending your enquiry. Please try again or contact us directly.';
+      formMessage.style.color = '#dc3545';
+      formMessage.style.display = 'block';
+      console.error('Form submission error:', error);
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
     }
-
-    // TODO: Replace with a real form backend (e.g. Formspree, EmailJS, Netlify Forms)
-    const waText = encodeURIComponent(
-      `Hi Mandondo Consulting!\n\nName: ${name}\nPhone: ${phone}\nService: ${service || 'Not specified'}\nMessage: ${message || 'No message'}`
-    );
-    window.open(`https://wa.me/27000000000?text=${waText}`, '_blank');
   });
 }
 
